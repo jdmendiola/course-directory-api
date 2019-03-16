@@ -8,7 +8,7 @@ const User = require('./models/User');
 
 const app = express();
 
-//connect mongodb
+// connect mongodb
 mongoose.connect("mongodb://localhost:27017/course-api");
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -22,7 +22,7 @@ app.use(morgan('dev'));
 // TODO add additional routes here
 
 // send a friendly greeting for the root route
-app.get('/', (req, res) => {
+app.get('/api/courses', (req, res) => {
 	User.find((err, users) => {
 		if (err) return console.error(err);
 		res.json(users);
