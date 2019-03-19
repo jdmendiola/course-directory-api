@@ -25,7 +25,7 @@ app.use(morgan('dev'));
 app.get('/api/courses', (req, res) => {
 	Review.find({}).exec(function(err, review){
 		if (err) console.error(err);
-		console.log(review);
+		res.json(review);
 	});
 });
 

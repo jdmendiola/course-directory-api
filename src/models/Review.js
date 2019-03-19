@@ -5,7 +5,10 @@ const UserSchema = require('./User').UserSchema;
 const Schema = mongoose.Schema;
 
 let ReviewSchema = new Schema({
-    user: UserSchema,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     postedOn: {
         type: Date,
         default: Date.now
