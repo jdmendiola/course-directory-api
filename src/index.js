@@ -12,7 +12,13 @@ const app = express();
 // connect mongodb
 mongoose.connect("mongodb://localhost:27017/course-api");
 let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on("error", function(err){
+	console.error("connection error:", err);
+});
+
+db.once("open", function(){
+	console.log("db connection successful");
+});
 
 // set our port
 app.set('port', process.env.PORT || 5000);
@@ -23,11 +29,10 @@ app.use(morgan('dev'));
 // TODO add additional routes here
 
 // send a friendly greeting for the root route
-app.get('/api/courses', (req, res) => {
-	Course.find({}).exec(function(err, course){
-		if (err) console.error(err);
-		res.json(course);
-	});
+app.get('/', (req, res, next) => {
+	res.json({
+		message: 'Welcome to the Course Review API'
+	  });
 });
 
 // uncomment this route in order to test the global error handler
