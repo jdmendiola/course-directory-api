@@ -5,6 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Review = require('./models/Review');
+const Course = require('./models/Course');
 
 const app = express();
 
@@ -23,9 +24,9 @@ app.use(morgan('dev'));
 
 // send a friendly greeting for the root route
 app.get('/api/courses', (req, res) => {
-	Review.find({}).exec(function(err, review){
+	Course.find({}).exec(function(err, course){
 		if (err) console.error(err);
-		res.json(review);
+		res.json(course);
 	});
 });
 

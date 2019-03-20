@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
-const User = require('./User');
-const UserSchema = require('./User').UserSchema;
 
 const Schema = mongoose.Schema;
 
 let ReviewSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    user: { type: Schema.Types.ObjectId, ref: 'User'},
     postedOn: {
         type: Date,
         default: Date.now
@@ -24,5 +19,4 @@ let ReviewSchema = new Schema({
 });
 
 let Review = mongoose.model('Review', ReviewSchema);
-
 module.exports = Review;
