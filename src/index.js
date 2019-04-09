@@ -6,12 +6,15 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Review = require('./models/Review');
 const Course = require('./models/Course');
+const routes = require('./routes');
 
 const app = express();
 
 // connect mongodb
 mongoose.connect("mongodb://localhost:27017/course-api");
+
 let db = mongoose.connection;
+
 db.on("error", function(err){
 	console.error("connection error:", err);
 });
@@ -27,12 +30,13 @@ app.set('port', process.env.PORT || 5000);
 app.use(morgan('dev'));
 
 // TODO add additional routes here
+app.use('/api', routes);
 
 // send a friendly greeting for the root route
 app.get('/', (req, res, next) => {
 	res.json({
 		message: 'Welcome to the Course Review API'
-	  });
+	});
 });
 
 // uncomment this route in order to test the global error handler
