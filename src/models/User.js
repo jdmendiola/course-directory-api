@@ -17,7 +17,7 @@ let UserSchema = new Schema({
                 let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
                 return emailRegex.test(value);
             },
-            message: 'Not a valid email format'
+            message: 'Email must be unique and in correct format.'
         }
     },
     password: {

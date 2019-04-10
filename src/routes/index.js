@@ -9,8 +9,10 @@ router.get('/users', (req, res, next) => {
 
 router.post('/users', (req, res, next) => {
     User.create(req.body, (err, user) => {
-        if (err) return next(err);
-        res.json(user);
+        if (err) return res.send(err.message);
+        res.status(201);
+        res.setHeader('Location', '/');
+        res.send('');
     })
 });
 
