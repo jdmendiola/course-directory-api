@@ -2,6 +2,7 @@
 
 // load modules
 const express = require('express');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Review = require('./models/Review');
@@ -28,6 +29,10 @@ app.set('port', process.env.PORT || 5000);
 
 // morgan gives us http request logging
 app.use(morgan('dev'));
+
+// Parse the request body
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // TODO add additional routes here
 app.use('/api', routes);
