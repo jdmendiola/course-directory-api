@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User').User;
+const Course = require('../models/Course');
 
+// GET /users
 router.get('/users', (req, res, next) => {
     res.status(200);
     res.end();
 });
 
+// POST /users
 router.post('/users', (req, res, next) => {
     User.create(req.body, (err, user) => {
         if (err) return res.send(err.message);
@@ -15,5 +18,17 @@ router.post('/users', (req, res, next) => {
         res.send('');
     })
 });
+
+// GET /courses
+router.get('/courses', (req, res, next) => {
+    Course.find({}, '_id title', function(err, course){
+        res.status(200);
+        res.send(course);
+    });
+});
+
+// PUT /courses/:courseID
+
+
 
 module.exports = router;
