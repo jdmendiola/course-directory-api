@@ -31,8 +31,14 @@ router.get('/courses', (req, res, next) => {
 // GET /courses/:courseID
 router.get('/courses/:courseID', (req, res, next) => {
     Course.findById(req.params.courseID)
-    .populate('reviews')
-    .populate('user')
+    .populate({
+        path: 'reviews',
+        populate: {
+            path: 'user',
+            select: 'fullName'
+        }
+    })
+    .populate('user', 'fullName')
     .exec(function (err, course){
         res.json(course);
     });
@@ -58,6 +64,7 @@ router.put('/courses/:courseID', (req, res, next) => {
     });
 });
 
+// POST /course/:courseID/reviews
 router.post('/courses/:courseID/reviews', (req, res, next) => {
     Course.findById(req.params.courseID, (err, course) => {
         if (err) return res.send(err.message);
@@ -66,7 +73,9 @@ router.post('/courses/:courseID/reviews', (req, res, next) => {
             course.reviews.push(review);
             course.save((err, course) => {
                 if (err) return res.send(err.message);
-                res.json(course);
+                res.status(201);
+                res.setHeader('Location', `/api/courses/${req.params.courseID}`);
+                res.send('');
             });
         });
     });
