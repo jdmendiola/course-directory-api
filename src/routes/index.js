@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User').User;
 const Course = require('../models/Course');
+const Review = require('../models/Review');
 
 // GET /users
 router.get('/users', (req, res, next) => {
@@ -21,7 +22,7 @@ router.post('/users', (req, res, next) => {
 
 // GET /courses
 router.get('/courses', (req, res, next) => {
-    Course.find({}, '_id title', function(err, course){
+    Course.find({}, '_id title', (err, course) => {
         res.status(200);
         res.send(course);
     });
@@ -57,5 +58,18 @@ router.put('/courses/:courseID', (req, res, next) => {
     });
 });
 
+router.post('/courses/:courseID/reviews', (req, res, next) => {
+    Course.findById(req.params.courseID, (err, course) => {
+        if (err) return res.send(err.message);
+        Review.create(req.body, (err, review) => {
+            if (err) return res.send(err.message);
+            course.reviews.push(review);
+            course.save((err, course) => {
+                if (err) return res.send(err.message);
+                res.json(course);
+            });
+        });
+    });
+});
 
 module.exports = router;
