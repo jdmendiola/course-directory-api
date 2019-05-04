@@ -47,8 +47,14 @@ router.post('/courses', (req, res, next) => {
     });
 });
 
+// PUT /course/:courseID
 router.put('/courses/:courseID', (req, res, next) => {
-    
+    Course.update({ _id: req.params.courseID }, req.body, (err, course) => {
+        if (err) return res.send(err.message);
+        res.status(204);
+        res.json(course);
+        res.send('');
+    });
 });
 
 
