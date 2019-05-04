@@ -68,8 +68,6 @@ router.put('/courses/:courseID', (req, res, next) => {
             return next(err);
         }
         res.status(204);
-        res.json(course);
-        res.send('');
     });
 });
 
