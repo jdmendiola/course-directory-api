@@ -28,7 +28,14 @@ router.get('/courses', (req, res, next) => {
 });
 
 // PUT /courses/:courseID
-
+router.get('/courses/:courseID', (req, res, next) => {
+    Course.findById(req.params.courseID)
+    .populate('reviews')
+    .populate('user')
+    .exec(function (err, course){
+        res.json(course);
+    });
+});
 
 
 module.exports = router;
