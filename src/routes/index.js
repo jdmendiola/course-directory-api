@@ -27,7 +27,7 @@ router.get('/courses', (req, res, next) => {
     });
 });
 
-// PUT /courses/:courseID
+// GET /courses/:courseID
 router.get('/courses/:courseID', (req, res, next) => {
     Course.findById(req.params.courseID)
     .populate('reviews')
@@ -35,6 +35,20 @@ router.get('/courses/:courseID', (req, res, next) => {
     .exec(function (err, course){
         res.json(course);
     });
+});
+
+// POST /courses
+router.post('/courses', (req, res, next) => {
+    Course.create(req.body, (err, course) => {
+        if (err) return res.send(err.message);
+        res.status(201);
+        res.setHeader('Location', '/');
+        res.send('');
+    });
+});
+
+router.put('/courses/:courseID', (req, res, next) => {
+    
 });
 
 
