@@ -13,7 +13,10 @@ router.get('/users', (req, res, next) => {
 // POST /users
 router.post('/users', (req, res, next) => {
     User.create(req.body, (err, user) => {
-        if (err) return res.send(err.message);
+        if (err){
+            err.status = 400;
+            return next(err);
+        }
         res.status(201);
         res.setHeader('Location', '/');
         res.send('');
@@ -47,7 +50,10 @@ router.get('/courses/:courseID', (req, res, next) => {
 // POST /courses
 router.post('/courses', (req, res, next) => {
     Course.create(req.body, (err, course) => {
-        if (err) return res.send(err.message);
+        if (err){
+            err.status = 400;
+            return next(err);
+        }
         res.status(201);
         res.setHeader('Location', '/');
         res.send('');
@@ -57,7 +63,10 @@ router.post('/courses', (req, res, next) => {
 // PUT /course/:courseID
 router.put('/courses/:courseID', (req, res, next) => {
     Course.update({ _id: req.params.courseID }, req.body, (err, course) => {
-        if (err) return res.send(err.message);
+        if (err){
+            err.status = 400;
+            return next(err);
+        }
         res.status(204);
         res.json(course);
         res.send('');
@@ -69,7 +78,10 @@ router.post('/courses/:courseID/reviews', (req, res, next) => {
     Course.findById(req.params.courseID, (err, course) => {
         if (err) return res.send(err.message);
         Review.create(req.body, (err, review) => {
-            if (err) return res.send(err.message);
+            if (err){
+                err.status = 400;
+                return next(err);
+            }
             course.reviews.push(review);
             course.save((err, course) => {
                 if (err) return res.send(err.message);
