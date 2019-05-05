@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User').User;
+const User = require('../models/User');
 const Course = require('../models/Course');
 const Review = require('../models/Review');
 
@@ -56,7 +56,7 @@ router.post('/courses', (req, res, next) => {
         }
         res.status(201);
         res.setHeader('Location', '/');
-        res.send('');
+        res.end();
     });
 });
 
@@ -85,7 +85,7 @@ router.post('/courses/:courseID/reviews', (req, res, next) => {
                 if (err) return res.send(err.message);
                 res.status(201);
                 res.setHeader('Location', `/api/courses/${req.params.courseID}`);
-                res.send('');
+                res.end();
             });
         });
     });

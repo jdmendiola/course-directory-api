@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+
 
 let UserSchema = new Schema({
     fullName: {
@@ -26,5 +28,12 @@ let UserSchema = new Schema({
     } 
 });
 
+UserSchema.pre('save', function(next){
+    let user = this;
+    user.password = bcrypt.hashSync(user.password);
+    next();
+});
+
+
 let User = mongoose.model('User', UserSchema);
-module.exports.User = User;
+module.exports = User;
