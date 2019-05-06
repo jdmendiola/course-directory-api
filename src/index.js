@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const Review = require('./models/Review');
 const Course = require('./models/Course');
 const routes = require('./routes');
+const session = require('express-session');
 
 const app = express();
 
@@ -29,6 +30,13 @@ app.set('port', process.env.PORT || 5000);
 
 // morgan gives us http request logging
 app.use(morgan('dev'));
+
+// user sessions
+app.use(session({
+	secret: 'nba playoffs',
+	resave: true,
+	saveUninitialized: false
+}));
 
 // Parse the request body
 app.use(bodyParser.json());

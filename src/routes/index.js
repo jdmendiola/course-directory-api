@@ -3,11 +3,34 @@ const router = express.Router();
 const User = require('../models/User');
 const Course = require('../models/Course');
 const Review = require('../models/Review');
+const basicAuth = require('basic-auth');
+
+// AUTH Middleware
+let authorize = function(req, res, next){
+    let auth = basicAuth(req);
+    if (auth){
+        User.authorize(auth.name, auth.pass, (err, result) => {
+            if (err) return next(err);
+            req.session.user = result;
+            return next();
+        });
+    } else {
+        req.noAuth = true;
+        return next();
+    }
+}
 
 // GET /users
-router.get('/users', (req, res, next) => {
-    res.status(200);
-    res.end();
+router.get('/users', authorize, (req, res, next) => {
+    if (!req.noAuth){
+        res.status(200);
+        res.json(req.session.user);
+        res.end();
+    } else {
+        res.status(401);
+        res.send('No authorized user to GET');
+        res.end();
+    }
 });
 
 // POST /users

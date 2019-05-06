@@ -28,9 +28,29 @@ let UserSchema = new Schema({
     } 
 });
 
+UserSchema.statics.authorize = function(email, password, cb){
+    let authorizeQuery = this.findOne({emailAddress: email});
+    authorizeQuery.exec((err, result) => {
+        if (err){
+            return cb(err);
+        } else if (result == null){
+            let nullError = new Error('That user does not exist.');
+            nullError.status = 400;
+            return cb(nullError);
+        }
+        let authorized = bcrypt.compareSync(password, result.password);
+        if (authorized){
+            return cb(null, result);
+        } else {
+            let nonAuthorizedError = new Error('Incorrect password.');
+            nonAuthorizedError.status = 401;
+            return cb(nonAuthorizedError);
+        }
+    });
+}
+
 UserSchema.pre('save', function(next){
-    let user = this;
-    user.password = bcrypt.hashSync(user.password);
+    this.password = bcrypt.hashSync(this.password);
     next();
 });
 
