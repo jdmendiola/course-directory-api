@@ -50,7 +50,7 @@ router.get('/courses', (req, res, next) => {
 });
 
 // GET /courses/:courseID
-router.get('/courses/:courseID', authorize, (req, res, next) => {
+router.get('/courses/:courseID', (req, res, next) => {
     Course.findById(req.params.courseID)
     .populate({
         path: 'reviews',
