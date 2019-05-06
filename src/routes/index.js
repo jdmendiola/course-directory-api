@@ -79,13 +79,14 @@ router.post('/courses', authorize, (req, res, next) => {
 });
 
 // PUT /course/:courseID
-router.put('/courses/:courseID', (req, res, next) => {
+router.put('/courses/:courseID', authorize, (req, res, next) => {
     Course.update({ _id: req.params.courseID }, req.body, (err, course) => {
         if (err){
             err.status = 400;
             return next(err);
         }
         res.status(204);
+        res.end();
     });
 });
 
