@@ -15,22 +15,17 @@ let authorize = function(req, res, next){
             return next();
         });
     } else {
-        req.noAuth = true;
-        return next();
+        let noAuth = new Error('This is a non authorized session. No access will be given.');
+        noAuth.status = 401;
+        return next(noAuth);
     }
 }
 
 // GET /users
 router.get('/users', authorize, (req, res, next) => {
-    if (!req.noAuth){
-        res.status(200);
-        res.json(req.session.user);
-        res.end();
-    } else {
-        res.status(401);
-        res.send('No authorized user to GET');
-        res.end();
-    }
+    res.status(200);
+    res.json(req.session.user);
+    res.end();
 });
 
 // POST /users
@@ -55,7 +50,7 @@ router.get('/courses', (req, res, next) => {
 });
 
 // GET /courses/:courseID
-router.get('/courses/:courseID', (req, res, next) => {
+router.get('/courses/:courseID', authorize, (req, res, next) => {
     Course.findById(req.params.courseID)
     .populate({
         path: 'reviews',
@@ -71,7 +66,7 @@ router.get('/courses/:courseID', (req, res, next) => {
 });
 
 // POST /courses
-router.post('/courses', (req, res, next) => {
+router.post('/courses', authorize, (req, res, next) => {
     Course.create(req.body, (err, course) => {
         if (err){
             err.status = 400;
@@ -95,22 +90,33 @@ router.put('/courses/:courseID', (req, res, next) => {
 });
 
 // POST /course/:courseID/reviews
-router.post('/courses/:courseID/reviews', (req, res, next) => {
+router.post('/courses/:courseID/reviews', authorize, (req, res, next) => {
     Course.findById(req.params.courseID, (err, course) => {
+
         if (err) return res.send(err.message);
-        Review.create(req.body, (err, review) => {
-            if (err){
-                err.status = 400;
-                return next(err);
-            }
-            course.reviews.push(review);
-            course.save((err, course) => {
-                if (err) return res.send(err.message);
-                res.status(201);
-                res.setHeader('Location', `/api/courses/${req.params.courseID}`);
-                res.end();
+
+        let sessionUser = req.session.user.id;
+        let courseUser = course.get('user'); 
+
+        if (sessionUser != courseUser){
+            Review.create(req.body, (err, review) => {
+                if (err){
+                    err.status = 400;
+                    return next(err);
+                }
+                course.reviews.push(review);
+                course.save((err, course) => {
+                    if (err) return res.send(err.message);
+                    res.status(201);
+                    res.setHeader('Location', `/api/courses/${req.params.courseID}`);
+                    res.end();
+                });
             });
-        });
+        } else {
+            let error = new Error('You cannot leave a review on your own course!');
+            error.status = 400;
+            next(error);
+        }
     });
 });
 
