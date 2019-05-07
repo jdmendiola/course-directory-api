@@ -61,6 +61,11 @@ router.get('/courses/:courseID', (req, res, next) => {
     })
     .populate('user', 'fullName')
     .exec(function (err, course){
+        if (err){
+            let error = new Error('Cannot get appropriate course.');
+            error.status = 401;
+            return next(error);
+        }
         res.json(course);
     });
 });
