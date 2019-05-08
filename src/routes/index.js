@@ -16,7 +16,7 @@ let authorize = function(req, res, next){
         });
     } else {
         let noAuth = new Error('This is a non authorized session. No access will be given.');
-        noAuth.status = 401;
+        noAuth.status = 403;
         return next(noAuth);
     }
 }

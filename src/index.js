@@ -18,7 +18,7 @@ mongoose.connect("mongodb://localhost:27017/course-api");
 let db = mongoose.connection;
 
 db.on("error", function(err){
-	console.error("connection error:", err);
+	console.error("db connection error:", err);
 });
 
 db.once("open", function(){
