@@ -35,7 +35,7 @@ UserSchema.statics.authorize = function(email, password, cb){
             return cb(err);
         } else if (result == null){
             let nullError = new Error('That user does not exist.');
-            nullError.status = 400;
+            nullError.status = 401;
             return cb(nullError);
         }
         let authorized = bcrypt.compareSync(password, result.password);
