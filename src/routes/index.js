@@ -37,20 +37,24 @@ router.post('/users', (req, res, next) => {
         }
         res.status(201);
         res.setHeader('Location', '/');
-        res.send('');
+        res.end();
     })
 });
 
 // GET /courses
 router.get('/courses', (req, res, next) => {
     Course.find({}, '_id title', (err, course) => {
+        if (err){
+            err.status = 400;
+            return next(err);
+        }
         res.status(200);
         res.send(course);
     });
 });
 
 // GET /courses/:courseID
-router.get('/courses/:courseID', authorize, (req, res, next) => {
+router.get('/courses/:courseID', (req, res, next) => {
     Course.findById(req.params.courseID)
     .populate({
         path: 'reviews',
@@ -99,7 +103,10 @@ router.put('/courses/:courseID', authorize, (req, res, next) => {
 router.post('/courses/:courseID/reviews', authorize, (req, res, next) => {
     Course.findById(req.params.courseID, (err, course) => {
 
-        if (err) return res.send(err.message);
+        if (err){
+            err.status = 400;
+            return next(err);
+        }
 
         let sessionUser = req.session.user.id;
         let courseUser = course.get('user'); 
@@ -112,7 +119,10 @@ router.post('/courses/:courseID/reviews', authorize, (req, res, next) => {
                 }
                 course.reviews.push(review);
                 course.save((err, course) => {
-                    if (err) return res.send(err.message);
+                    if (err){
+                        err.status = 400;
+                        return next(err);
+                    }
                     res.status(201);
                     res.setHeader('Location', `/api/courses/${req.params.courseID}`);
                     res.end();
