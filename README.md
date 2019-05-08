@@ -2,15 +2,19 @@
 
 ### Getting Started
 
+These instructions are for Treehouse enabled testers.
+
   * Ensure mongodb is installed
-  * Ensure mongodb is seeded provided by project files
-  * Ensure postman application is installed and course rating api templates are loaded
-  * Clone github repository into local application folder
-  * Run npm install
+  * Ensure mongodb is seeded width seed-data from treehouse project files
+  * Ensure postman application is installed and course rating api templates are loaded from treehouse project files
+  * Ensure mongodb server is running
+  * Clone project into desired local folder and change directory to root application folder
+  * Run this command npm install
 
 ### How to Run the Application
-  * npm start
+  * Run this command npm start
   * View application at http://localhost:5000
+  * Begin testing API routes using postman
 
 ### How to Run Unit Tests
-  * npm test
+  * Run this command npm test
