@@ -18,4 +18,4 @@ These instructions are for Treehouse enabled testers.
 
 ### How to Run Unit Tests
   * Since testing is based on a user with a hash/salt password. You must use the user you created for the unit tests. Change the username:password key:value pair which looks like this `'Authorization': 'Basic ' + Buffer.from("firstlast@email.com:password").toString('base64')` in the `__tests__/api/api_specs.js` file for the test marked with the comment `//first test`
-  * Run this command `npm test`
+  * Run this command `npm test` on the application folder root
